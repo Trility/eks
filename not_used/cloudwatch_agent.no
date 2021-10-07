@@ -1,0 +1,40 @@
+resource "aws_iam_role" "cloudwatch_agent" {
+  name = "eks_cloudwatch_agent"
+
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Federated": aws_iam_openid_connect_provider.cluster.arn
+        },
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        "Condition": {
+          "StringEquals": {
+            "${replace(aws_iam_openid_connect_provider.cluster.url, "https://", "")}:sub": "system:serviceaccount:amazon-cloudwatch:cwagent-prometheus"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy_attachment" "cloudwatch_agent" {
+  name = "eks_cloudwatch_agent"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  roles = [ aws_iam_role.cloudwatch_agent.name ]
+}
+
+resource "kubernetes_service_account" "cloudwatch_agent" {
+  metadata {
+    name = "cwagent-prometheus"
+    namespace = "amazon-cloudwatch"
+    annotations = {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.cloudwatch_agent.arn
+    }
+  }
+  depends_on = [
+    aws_eks_node_group.node_group,
+  ]
+}
