@@ -7,8 +7,6 @@ variable "cidr_block_subnet_private_az3" {}
 variable "cidr_block_subnet_private_az4" {}
 variable "cidr_block_subnet_public_az1" {}
 variable "cidr_block_subnet_public_az2" {}
-variable "clientvpn_cert_server_arn" {}
-variable "clientvpn_cert_client_arn" {}
 variable "cluster_name" {}
 variable "eks_node_group_ami" {}
 variable "eks_version" {}
