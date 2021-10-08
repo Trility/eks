@@ -10,13 +10,17 @@ output "vpc_id" {
   value = aws_vpc.vpc.id
 }
 
+resource "aws_route53_zone_association" "assocation" {
+  zone_id = var.hosted_zone_id
+  vpc_id = aws_vpc.vpc.id
+}
+
 resource "aws_subnet" "private_az1" {
   vpc_id = aws_vpc.vpc.id
   availability_zone_id = "usw2-az1"
   cidr_block = var.cidr_block_subnet_private_az1
   tags = {
     Name = "eks-${var.cluster_name}-private-az1"
-    #    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -27,7 +31,6 @@ resource "aws_subnet" "private_az2" {
   cidr_block = var.cidr_block_subnet_private_az2
   tags = {
     Name = "eks-${var.cluster_name}-private-az2"
-    #"kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -38,7 +41,6 @@ resource "aws_subnet" "private_az3" {
   cidr_block = var.cidr_block_subnet_private_az3
   tags = {
     Name = "eks-${var.cluster_name}-private-az3"
-    #"kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -49,7 +51,6 @@ resource "aws_subnet" "private_az4" {
   cidr_block = var.cidr_block_subnet_private_az4
   tags = {
     Name = "eks-${var.cluster_name}-private-az4"
-    #"kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -87,8 +88,11 @@ resource "aws_subnet" "public_az1" {
   cidr_block = var.cidr_block_subnet_public_az1
   tags = {
     Name = "eks-${var.cluster_name}-public_az1"
-    #"kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
+}
+
+output "attach_subnet_id_01" {
+  value = aws_subnet.public_az1.id
 }
 
 resource "aws_subnet" "public_az2" {
@@ -97,8 +101,11 @@ resource "aws_subnet" "public_az2" {
   cidr_block = var.cidr_block_subnet_public_az2
   tags = {
     Name = "eks-${var.cluster_name}-public_az2"
-    #"kubernetes.io/cluster/${var.cluster_name}" = "shared"
   }
+}
+
+output "attach_subnet_id_02" {
+  value = aws_subnet.public_az2.id
 }
 
 resource "aws_route_table" "public" {
@@ -144,10 +151,6 @@ resource "aws_nat_gateway" "ngw" {
   tags = {
     Name = "eks-${var.cluster_name}"
   }
-}
-
-output "vpn_attach_subnet" {
-  value = aws_subnet.public_az1.id
 }
 
 resource "aws_route" "ngw" {
