@@ -134,3 +134,14 @@ resource "aws_eks_node_group" "node_group" {
     aws_launch_template.eks_launch_template,
   ]
 }
+
+resource "kubernetes_config_map" "iam_rbac" {
+  metadata {
+    name = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  data = {
+    "aws-auth-cm.yaml" = "${file("${path.module}/aws-auth-cm.yaml")}"
+  }
+}
