@@ -135,6 +135,10 @@ resource "aws_eks_node_group" "node_group" {
   ]
 }
 
+resource "kubectl_manifest" "iam_rbac" {
+  yaml_body = file("aws-auth-cm.yaml")
+}
+/*
 resource "kubernetes_config_map" "iam_rbac" {
   metadata {
     name = "aws-auth"
@@ -145,3 +149,4 @@ resource "kubernetes_config_map" "iam_rbac" {
     "aws-auth-cm.yaml" = "${file("${path.module}/aws-auth-cm.yaml")}"
   }
 }
+*/
