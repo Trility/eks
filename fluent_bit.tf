@@ -85,4 +85,8 @@ resource "helm_release" "fluent_bit" {
     name = "elasticsearch.enabled"
     value = "false"
   }
+
+  depends_on = [
+    kubernetes_service_account.fluent_bit,
+  ]
 }
