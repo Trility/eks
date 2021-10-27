@@ -134,12 +134,3 @@ resource "aws_eks_node_group" "node_group" {
     aws_launch_template.eks_launch_template,
   ]
 }
-
-resource "local_file" "kubeconfig" {
-  content = templatefile("${path.module}/kubeconfig.tpl", {
-    endpoint-url = aws_eks_cluster.cluster.endpoint
-    base64-encoded-ca-cert = aws_eks_cluster.cluster.certificate_authority[0].data
-    cluster-name = aws_eks_cluster.cluster.name
-  })
-  filename = pathexpand("~/kubeconfig-${var.cluster_name}")
-}
