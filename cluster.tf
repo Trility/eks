@@ -28,8 +28,7 @@ resource "aws_eks_cluster" "cluster" {
   role_arn = aws_iam_role.cluster-eks.arn
   version  = var.eks_version
   vpc_config {
-    subnet_ids = [aws_subnet.private_az1.id, aws_subnet.private_az2.id, aws_subnet.private_az3.id, aws_subnet.private_az4.id]
-    #    subnet_ids = concat(tolist(data.aws_subnet_ids.private.ids), tolist(data.aws_subnet_ids.public.ids)) 
+    subnet_ids = concat(tolist([for value in aws_subnet.private_subnets: value.id]))
   }
 }
 
@@ -119,7 +118,7 @@ resource "aws_eks_node_group" "node_group" {
   node_group_name = var.cluster_name
   node_role_arn = aws_iam_role.node-group.arn
   release_version = var.eks_node_group_ami
-  subnet_ids = [aws_subnet.private_az1.id, aws_subnet.private_az2.id, aws_subnet.private_az3.id, aws_subnet.private_az4.id]
+  subnet_ids = concat(tolist([for value in aws_subnet.private_subnets: value.id]))
   scaling_config {
     desired_size = 5
     max_size = 5
@@ -138,15 +137,3 @@ resource "aws_eks_node_group" "node_group" {
 resource "kubectl_manifest" "iam_rbac" {
   yaml_body = file("aws-auth-cm.yaml")
 }
-/*
-resource "kubernetes_config_map" "iam_rbac" {
-  metadata {
-    name = "aws-auth"
-    namespace = "kube-system"
-  }
-
-  data = {
-    "aws-auth-cm.yaml" = "${file("${path.module}/aws-auth-cm.yaml")}"
-  }
-}
-*/

@@ -1,12 +1,6 @@
 variable "aws_lb_controller_version" {}
 variable "aws_region" {}
 variable "cidr_block_vpc" {}
-variable "cidr_block_subnet_private_az1" {}
-variable "cidr_block_subnet_private_az2" {}
-variable "cidr_block_subnet_private_az3" {}
-variable "cidr_block_subnet_private_az4" {}
-variable "cidr_block_subnet_public_az1" {}
-variable "cidr_block_subnet_public_az2" {}
 variable "cluster_name" {}
 variable "eks_node_group_ami" {}
 variable "eks_version" {}
