@@ -85,6 +85,10 @@ resource "aws_subnet" "public_subnets" {
   }
 }
 
+output "public_subnets" {
+  value = { for k, v in aws_subnet.public_subnets: k => v.id }
+}
+
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
   tags = {
