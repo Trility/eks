@@ -9,17 +9,19 @@ on:
 jobs:
   inspec:
     name: "Integration Tests"
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@master
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::533618305027:role/github-oidc
           aws-region: us-west-2
-          role-skip-session-tagging: true
             
       - name: Inspec
         run: |
