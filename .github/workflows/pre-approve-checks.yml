@@ -21,10 +21,6 @@ jobs:
         id: fmt
         run: terraform fmt -check
 
-      - name: tfsec
-        uses: tfsec/tfsec-sarif-action@main
-        continue-on-error: true
-
       - name: Terraform Init
         id: init
         run: terraform init
