@@ -1,0 +1,5 @@
+name: Vault on EKS
+title: Vault on EKS
+version: 1.0.0
+supports:
+  - platform: aws

@@ -1,0 +1,29 @@
+name: "Integration Tests"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  inspec:
+    name: "Integration Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::533618305027:role/github-oidc
+          aws-region: us-west-2
+          role-skip-session-tagging: true
+            
+      - name: Inspec
+        run: |
+          curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
+          inspec exec . -t aws://
+
+
