@@ -69,7 +69,8 @@ resource "aws_launch_template" "eks_launch_template" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name = "eks-${var.cluster_name}"
+      Name        = "eks-${var.cluster_name}"
+      Environment = "prod"
     }
   }
   tag_specifications {
