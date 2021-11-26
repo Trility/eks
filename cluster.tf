@@ -27,7 +27,7 @@ resource "aws_eks_cluster" "cluster" {
   name                      = var.cluster_name
   role_arn                  = aws_iam_role.cluster-eks.arn
   tags = {
-    Environment = "prod"
+    Environment = "test"
   }
   version = var.eks_version
   vpc_config {
