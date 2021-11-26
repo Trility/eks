@@ -14,21 +14,21 @@ resource "aws_iam_role" "cluster-eks" {
 
 resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role = aws_iam_role.cluster-eks.name
+  role       = aws_iam_role.cluster-eks.name
 }
 
 resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSVPCResourceController" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role = aws_iam_role.cluster-eks.name
+  role       = aws_iam_role.cluster-eks.name
 }
 
 resource "aws_eks_cluster" "cluster" {
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
-  name = var.cluster_name
-  role_arn = aws_iam_role.cluster-eks.arn
-  version  = var.eks_version
+  name                      = var.cluster_name
+  role_arn                  = aws_iam_role.cluster-eks.arn
+  version                   = var.eks_version
   vpc_config {
-    subnet_ids = concat(tolist([for value in aws_subnet.private_subnets: value.id]))
+    subnet_ids = concat(tolist([for value in aws_subnet.private_subnets : value.id]))
   }
 }
 
@@ -37,9 +37,9 @@ data "tls_certificate" "cert" {
 }
 
 resource "aws_iam_openid_connect_provider" "cluster" {
-  client_id_list = ["sts.amazonaws.com"]
+  client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.cert.certificates[0].sha1_fingerprint]
-  url = aws_eks_cluster.cluster.identity[0].oidc[0].issuer
+  url             = aws_eks_cluster.cluster.identity[0].oidc[0].issuer
 }
 
 output "openid_url" {
@@ -96,33 +96,33 @@ resource "aws_iam_role" "node-group" {
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role = aws_iam_role.node-group.name
+  role       = aws_iam_role.node-group.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role = aws_iam_role.node-group.name
+  role       = aws_iam_role.node-group.name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role = aws_iam_role.node-group.name
+  role       = aws_iam_role.node-group.name
 }
 
 resource "aws_eks_node_group" "node_group" {
   cluster_name = aws_eks_cluster.cluster.name
   launch_template {
-    name = aws_launch_template.eks_launch_template.name
+    name    = aws_launch_template.eks_launch_template.name
     version = aws_launch_template.eks_launch_template.latest_version
   }
   node_group_name = var.cluster_name
-  node_role_arn = aws_iam_role.node-group.arn
+  node_role_arn   = aws_iam_role.node-group.arn
   release_version = var.eks_node_group_ami
-  subnet_ids = concat(tolist([for value in aws_subnet.private_subnets: value.id]))
+  subnet_ids      = concat(tolist([for value in aws_subnet.private_subnets : value.id]))
   scaling_config {
     desired_size = 5
-    max_size = 5
-    min_size = 5
+    max_size     = 5
+    min_size     = 5
   }
   version = var.eks_version
 
