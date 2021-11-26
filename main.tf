@@ -8,6 +8,14 @@ data "aws_eks_cluster_auth" "auth" {
   name = var.cluster_name
 }
 
+backend "remote" {
+  organization = "trility"
+
+  workspaces {
+    name = "eks"
+  }
+}
+
 provider "kubernetes" {
   host                   = aws_eks_cluster.cluster.endpoint
   cluster_ca_certificate = base64decode(aws_eks_cluster.cluster.certificate_authority[0].data)
