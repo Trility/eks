@@ -22,7 +22,7 @@ terraform {
     }
   }
   backend "remote" {
-    organization = "trility"
+    organization = "trility-demo"
 
     workspaces {
       name = "eks"
