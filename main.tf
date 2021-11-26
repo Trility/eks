@@ -20,13 +20,12 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = ">= 1.11.3"
     }
+  }
+  backend "remote" {
+    organization = "trility"
 
-    backend "remote" {
-      organization = "trility"
-
-      workspaces {
-        name = "eks"
-      }
+    workspaces {
+      name = "eks"
     }
   }
 }
