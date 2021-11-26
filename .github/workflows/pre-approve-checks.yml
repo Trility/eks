@@ -18,11 +18,11 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Format
-        # id: fmt
+        id: fmt
         run: terraform fmt -check
 
       - name: tfsec
-        users: tfsec/tfsec-sarif-action@main
+        uses: tfsec/tfsec-sarif-action@main
         continue-on-error: true
 
       - name: Terraform Init
