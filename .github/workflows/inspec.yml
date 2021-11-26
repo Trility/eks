@@ -26,6 +26,5 @@ jobs:
       - name: Inspec
         run: |
           curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
+          CHEF_LICENSE="accept"
           inspec exec . -t aws://
-
-
