@@ -10,7 +10,10 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Terraform Plan and Apply"
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -74,4 +77,20 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+        run: | 
+          terraform apply -auto-approve
+          echo ::set-output name=exit_code::$?
+
+      - name: Configure AWS Credentials
+        if: steps.build.outputs.exit_code == 0
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::533618305027:role/github-oidc
+          aws-region: us-west-2
+            
+      - name: Inspec
+        needs: Configure AWS Credentials
+        run: |
+          curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
+          cd tests/integration/profile
+          inspec exec . -t aws:// --chef-license accept
