@@ -89,7 +89,7 @@ jobs:
           aws-region: us-west-2
             
       - name: Inspec
-        needs: Configure AWS Credentials
+        if: steps.build.outputs.exit_code == 0
         run: |
           curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
           cd tests/integration/profile
