@@ -1,7 +1,11 @@
 name: "Terraform"
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
+
   workflow_dispatch:
 
 jobs:
@@ -53,7 +57,7 @@ jobs:
             </details>
             
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-            
+            s
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
