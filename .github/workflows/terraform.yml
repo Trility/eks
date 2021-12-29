@@ -95,5 +95,4 @@ jobs:
       - name: Inspec
         run: |
           cd tests/integration/profile
-          docker run --rm -e AWS_REGION=us-west-2 -v ~/.aws:/root/.aws -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
-
+          docker run --rm -e AWS_REGION=us-west-2 -e AWS_ACCESS_KEY_ID=${{ env.aws_access_key_id }} -e AWS_SECRET_ACCESS_KEY=${{ env.aws_secret_access_key }} -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
