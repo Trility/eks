@@ -1,5 +1,8 @@
 name: Vault on EKS
 title: Vault on EKS
-version: 1.0.0
+version: 1.0.1
+depends:
+  - name: inspec-aws
+    url: https://github.com/inspec/inspec-aws/archive/refs/tags/v1.74.71.tar.gz
 supports:
   - platform: aws
