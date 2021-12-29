@@ -94,6 +94,5 @@ jobs:
             
       - name: Inspec
         run: |
-          curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
           cd tests/integration/profile
-          inspec exec . -t aws:// --chef-license accept
+          docker run --rm -e AWS_REGION=us-west-2 -v ~/.aws:/root/.aws -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
