@@ -94,13 +94,12 @@ jobs:
             
       - name: Inspec
         run: |
-          echo ${{ env.aws_access_key_id }} 
-          echo ${{ env.aws_secret_access_key }}
+          env
           echo ${{ env.AWS_ACCESS_KEY_ID }} 
           echo ${{ env.AWS_SECRET_ACCESS_KEY }}
           echo $AWS_ACCESS_KEY_ID
           echo $AWS_SECRET_ACCESS_KEY
           cd tests/integration/profile
-          docker run --rm -e AWS_REGION=us-west-2 -e AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
+          # docker run --rm -e AWS_REGION=us-west-2 -e AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }} -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
           docker run --rm -e AWS_REGION=us-west-2 -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
           # docker run -it --rm -e AWS_REGION=us-west-2 -v ~/.aws:/root/.aws -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
