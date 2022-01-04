@@ -93,14 +93,4 @@ jobs:
           aws-region: us-west-2
             
       - name: Inspec
-        run: |
-          env
-          echo ${{ env.AWS_ACCESS_KEY_ID }} 
-          echo ${{ env.AWS_SECRET_ACCESS_KEY }}
-          echo $AWS_ACCESS_KEY_ID
-          echo $AWS_SECRET_ACCESS_KEY
-          cd tests/integration/profile
-          # docker run --rm -e ${{ env.AWS_REGION}} -e ${{ env.AWS_ACCESS_KEY_ID }} -e ${{ env.AWS_SECRET_ACCESS_KEY }} -e ${{ env.AWS_SESSION_TOKEN }} -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
-          docker run --rm -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
-          # docker run -it --rm -e AWS_REGION=us-west-2 -v ~/.aws:/root/.aws -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
-          # docker run --rm -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -v $(pwd):/share chef/inspec:4.52.9 exec . -t aws:// --chef-license accept
+        run: docker run --rm -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -v $(pwd):/share chef/inspec:4.52.9 exec tests/integration/profile -t aws:// --chef-license accept-silent --filter-empty-profiles

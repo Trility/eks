@@ -1,6 +1,6 @@
-name: Vault on EKS
-title: Vault on EKS
-version: 1.0.1
+name: eks
+title: AWS EKS Cluster with Networking
+version: 0.1.0
 depends:
   - name: inspec-aws
     url: https://github.com/inspec/inspec-aws/archive/refs/tags/v1.74.71.tar.gz
