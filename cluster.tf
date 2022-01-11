@@ -28,7 +28,6 @@ resource "aws_eks_cluster" "cluster" {
   role_arn                  = aws_iam_role.cluster-eks.arn
   tags = {
     Environment = "test"
-    tf_managed  = true
   }
   version = var.eks_version
   vpc_config {
