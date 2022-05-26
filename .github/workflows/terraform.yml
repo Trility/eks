@@ -75,22 +75,22 @@ jobs:
           terraform apply -auto-approve
           echo ::set-output name=exit_code::$?
 
-  inspec:
-    needs: terraform
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    permissions:
-      id-token: write
-      contents: read
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+          #  inspec:
+          #    needs: terraform
+          #    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+          #   permissions:
+          #   id-token: write
+          #   contents: read
+          #  runs-on: ubuntu-latest
+          #  steps:
+          #   - name: Checkout
+          #    uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::533618305027:role/github-oidc
-          aws-region: us-west-2
+          #  - name: Configure AWS Credentials
+          # uses: aws-actions/configure-aws-credentials@v1
+          # with:
+          # role-to-assume: arn:aws:iam::533618305027:role/github-oidc
+          # aws-region: us-west-2
             
-      - name: Inspec
-        run: docker run --rm -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -v $(pwd):/share chef/inspec:4.52.9 exec tests/integration/profile -t aws:// --chef-license accept-silent --filter-empty-profiles
+          #      - name: Inspec
+          #        run: docker run --rm -e AWS_REGION -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN -v $(pwd):/share chef/inspec:4.52.9 exec tests/integration/profile -t aws:// --chef-license accept-silent --filter-empty-profiles
