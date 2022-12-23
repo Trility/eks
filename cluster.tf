@@ -23,15 +23,15 @@ resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSVPCResourceControlle
 }
 
 resource "aws_security_group" "eks" {
-  name = "eks-${var.cluster_name}"
+  name        = "eks-${var.cluster_name}"
   description = "eks-${var.cluster_name}"
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "vpc traffic"
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["172.24.0.0/16"]
   }
 }
@@ -47,7 +47,7 @@ resource "aws_eks_cluster" "cluster" {
   vpc_config {
     endpoint_private_access = true
     endpoint_public_access  = false
-    security_group_ids = [ aws_security_group.eks.id ]
+    security_group_ids      = [aws_security_group.eks.id]
     subnet_ids              = var.subnet_ids
   }
 }
@@ -152,8 +152,4 @@ resource "aws_eks_node_group" "node_group" {
     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
     aws_launch_template.eks_launch_template,
   ]
-}
-
-resource "kubectl_manifest" "iam_rbac" {
-  yaml_body = file("aws-auth-cm.yaml")
 }
