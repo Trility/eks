@@ -37,6 +37,12 @@ resource "aws_security_group" "eks" {
 }
 
 resource "aws_eks_cluster" "cluster" {
+  encryption_config {
+    provider {
+      key_arn = aws_kms_key.eks_secret_encryption.arn
+    }
+    resources = ["secrets"]
+  }
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   name                      = var.cluster_name
   role_arn                  = aws_iam_role.cluster-eks.arn
@@ -86,6 +92,9 @@ resource "aws_launch_template" "eks_launch_template" {
   ebs_optimized = true
   */
   instance_type = "t3.medium"
+  metadata_options {
+    http_tokens = "required"
+  }
   tag_specifications {
     resource_type = "instance"
     tags = {
